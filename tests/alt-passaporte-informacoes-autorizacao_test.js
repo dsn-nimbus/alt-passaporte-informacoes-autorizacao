@@ -1,24 +1,22 @@
 "use strict";
 
 describe('alt.passaporte-informacoes-autorizacao', function() {
-  var _rootScope, _AuthorizationInfoService, _httpMock, _windowMock, _AltPassaporteUrlBase;
-  var URL_TOKEN = '/passaporte-rest-api/rest/authorization/token';
+  var _rootScope, _AltPassaporteAuthorizationInfoService, _httpMock, _windowMock, _AltPassaporteUrlBase;
+  var URL_BASE = 'http://123.com';
+  var URL_TOKEN = URL_BASE + '/passaporte-rest-api/rest/authorization/token';
 
-  beforeEach(module('alt.passaporte-informacoes-autorizacao', function(AltPassaporteUrlBaseProvider) {
-    AltPassaporteUrlBaseProvider.urlBase = 'http://123.com/';
-  }));
+  beforeEach(module('alt.passaporte-informacoes-autorizacao'));
 
   beforeEach(inject(function ($injector) {
     _rootScope = $injector.get('$rootScope');
-    _AuthorizationInfoService = $injector.get('AuthorizationInfoService');
-    _AltPassaporteUrlBase = $injector.get('AltPassaporteUrlBase');
+    _AltPassaporteAuthorizationInfoService = $injector.get('AltPassaporteAuthorizationInfoService');
     _httpMock = $injector.get('$httpBackend');
     _windowMock = $injector.get('$window');
   }));
 
   describe('getToken', function () {
     it('deve rejeitar a promessa, servidor retorna erro - 401 - sem mensagem', function () {
-      _httpMock.expectGET(_AltPassaporteUrlBase + URL_TOKEN).respond(401)
+      _httpMock.expectGET(URL_TOKEN).respond(401)
 
       var _onSuccess = function () {
         expect(true).toBeFalsy(); // não deve ser chamado
@@ -28,7 +26,7 @@ describe('alt.passaporte-informacoes-autorizacao', function() {
         expect(error).toBeDefined();
       };
 
-      _AuthorizationInfoService
+      new _AltPassaporteAuthorizationInfoService(URL_BASE)
         .getToken()
         .then(_onSuccess)
         .catch(_onError);
@@ -37,7 +35,7 @@ describe('alt.passaporte-informacoes-autorizacao', function() {
     });
 
     it('deve rejeitar a promessa, servidor retorna erro - 401 - com mensagem', function () {
-      _httpMock.expectGET(_AltPassaporteUrlBase + URL_TOKEN).respond(401, {erro: true})
+      _httpMock.expectGET(URL_TOKEN).respond(401, {erro: true})
 
       var _onSuccess = function () {
         expect(true).toBeFalsy(); // não deve ser chamado
@@ -48,7 +46,7 @@ describe('alt.passaporte-informacoes-autorizacao', function() {
         expect(error.data.erro).toBe(true);
       };
 
-      _AuthorizationInfoService
+      new _AltPassaporteAuthorizationInfoService(URL_BASE)
         .getToken()
         .then(_onSuccess)
         .catch(_onError);
@@ -57,7 +55,7 @@ describe('alt.passaporte-informacoes-autorizacao', function() {
     });
 
     it('deve retornar o token corretamente - 200', function () {
-      _httpMock.expectGET(_AltPassaporteUrlBase + URL_TOKEN).respond(200, {token: "abc123"});
+      _httpMock.expectGET(URL_TOKEN).respond(200, {token: "abc123"});
 
       var _onSuccess = function (token) {
           expect(token).toBe('abc123');
@@ -67,7 +65,7 @@ describe('alt.passaporte-informacoes-autorizacao', function() {
         expect(true).toBeFalsy(); // não deve ser chamado
       };
 
-      _AuthorizationInfoService
+      new _AltPassaporteAuthorizationInfoService(URL_BASE)
         .getToken()
         .then(_onSuccess)
         .catch(_onError);

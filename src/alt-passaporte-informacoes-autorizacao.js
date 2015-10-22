@@ -3,19 +3,14 @@
 
   ng
     .module('alt.passaporte-informacoes-autorizacao', [])
-    .provider('AltPassaporteUrlBase', function() {
-        this.urlBase = '';
-
-        this.$get = function() {
-          return this.urlBase;
+    .factory('AltPassaporteAuthorizationInfoService', ['$q', '$http', function($q, $http) {
+        var AltPassaporteAuthorizationInfoService = function(urlBase) {
+          this.url = urlBase + '/passaporte-rest-api/rest/authorization/token';
         };
-    })
-    .service('AuthorizationInfoService', ['$q', '$http', 'AltPassaporteUrlBase', function($q, $http, AltPassaporteUrlBase) {
-        var URL_BASE = AltPassaporteUrlBase + '/passaporte-rest-api/rest/authorization/token';
 
-        this.getToken = function() {
+        AltPassaporteAuthorizationInfoService.prototype.getToken = function() {
             return $http
-                    .get(URL_BASE)
+                    .get(this.url)
                     .then(function(info) {
                       return info.data.token;
                     })
@@ -23,5 +18,7 @@
                       return $q.reject(erro);
                     });
         };
+
+        return AltPassaporteAuthorizationInfoService;
     }]);
 }(angular));
