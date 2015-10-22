@@ -3,8 +3,15 @@
 
   ng
     .module('alt.passaporte-informacoes-autorizacao', [])
-    .service('AuthorizationInfoService', ['$q', '$http', function($q, $http) {
-        var URL_BASE = '/passaporte-rest-api/rest/authorization/token';
+    .provider('AltPassaporteUrlBase', function() {
+        this.urlBase = '';
+
+        this.$get = function() {
+          return this.urlBase;
+        };
+    })
+    .service('AuthorizationInfoService', ['$q', '$http', 'AltPassaporteUrlBase', function($q, $http, AltPassaporteUrlBase) {
+        var URL_BASE = AltPassaporteUrlBase + '/passaporte-rest-api/rest/authorization/token';
 
         this.getToken = function() {
             return $http
