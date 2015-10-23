@@ -1,7 +1,7 @@
 {
   "name": "alt-passaporte-informacoes-autorizacao",
   "main": "dist/alt-passaporte-informacoes-autorizacao.min.js",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "homepage": "https://github.com/dsn-nimbus/alt-passaporte-informacoes-autorizacao.git",
   "authors": ["dsn-nimbus <ericdantas0@gmail.com>"],
   "description": "desc",

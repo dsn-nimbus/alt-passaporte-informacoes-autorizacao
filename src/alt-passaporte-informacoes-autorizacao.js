@@ -3,6 +3,9 @@
 
   ng
     .module('alt.passaporte-informacoes-autorizacao', [])
+    .config(['$httpProvider', function($httpProvider) {
+      $httpProvider.defaults.withCredentials = true;
+    }])
     .factory('AltPassaporteAuthorizationInfoService', ['$q', '$http', function($q, $http) {
         var AltPassaporteAuthorizationInfoService = function(urlBase) {
           this.url = urlBase + '/passaporte-rest-api/rest/authorization/token';

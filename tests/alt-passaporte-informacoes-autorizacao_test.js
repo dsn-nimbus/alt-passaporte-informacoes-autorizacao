@@ -1,11 +1,13 @@
 "use strict";
 
 describe('alt.passaporte-informacoes-autorizacao', function() {
-  var _rootScope, _AltPassaporteAuthorizationInfoService, _httpMock, _windowMock, _AltPassaporteUrlBase;
+  var _rootScope, _AltPassaporteAuthorizationInfoService, _httpMock, _windowMock, _AltPassaporteUrlBase, _httpProvider;
   var URL_BASE = 'http://123.com';
   var URL_TOKEN = URL_BASE + '/passaporte-rest-api/rest/authorization/token';
 
-  beforeEach(module('alt.passaporte-informacoes-autorizacao'));
+  beforeEach(module('alt.passaporte-informacoes-autorizacao', function($httpProvider) {
+    _httpProvider = $httpProvider;
+  }));
 
   beforeEach(inject(function ($injector) {
     _rootScope = $injector.get('$rootScope');
@@ -13,6 +15,12 @@ describe('alt.passaporte-informacoes-autorizacao', function() {
     _httpMock = $injector.get('$httpBackend');
     _windowMock = $injector.get('$window');
   }));
+
+  describe('criação', function() {
+    it('deve ter o withCredentials setado como true', function() {
+      expect(_httpProvider.defaults.withCredentials).toBe(true);
+    })
+  })
 
   describe('getToken', function () {
     it('deve rejeitar a promessa, servidor retorna erro - 401 - sem mensagem', function () {
